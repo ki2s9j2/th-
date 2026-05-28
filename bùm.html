@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Một bức thư chúc mừng đơn giản, tinh tế dành gửi tặng những người thương yêu.">
+  <title>Bức Thư Nhỏ Gửi Lời Chúc 💌</title>
+  
+  <!-- Google Fonts: Playfair Display for classic title, Be Vietnam Pro for clean readable Vietnamese body, Dancing Script for handwritten signature -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Design Tokens & Theme Variable */
+    :root {
+      --bg-gradient-start: #fbf9f6;
+      --bg-gradient-end: #f3eee7;
+      --env-base: #ebdcd0;
+      --env-inner: #decbc0;
+      --env-pocket: #ebdcd0;
+      --env-flap: #f2e6dd;
+      --seal-bg: #8c2d19; /* Vintage terracotta wax seal */
+      --seal-shadow: rgba(140, 45, 25, 0.25);
+      --letter-bg: #fffdfc;
+      --letter-border: #ebdcd0;
+      --text-main: #4a3c31; /* Soft vintage warm brown */
+      --text-accent: #a97c50; /* Muted gold accent */
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background: radial-gradient(circle at center, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+      font-family: 'Be Vietnam Pro', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      color: var(--text-main);
+      perspective: 1000px;
+    }
+
+    /* Ambient decor shapes - soft, blurred, non-intrusive */
+    .decorations {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+    
+    .decor-blur {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.35;
+      background: #ebdcd0;
+    }
+    
+    .decor-1 {
+      top: -10%;
+      right: -10%;
+      width: 350px;
+      height: 350px;
+    }
+    
+    .decor-2 {
+      bottom: -15%;
+      left: -10%;
+      width: 450px;
+      height: 450px;
+    }
+
+    /* Outer Wrapper */
+    .envelope-container {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 400px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    /* Envelope styling */
+    .envelope-wrapper {
+      position: relative;
+      width: 320px;
+      height: 220px;
+      cursor: pointer;
+      transform-style: preserve-3d;
+      transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    .envelope-wrapper:hover {
+      transform: translateY(-8px);
+    }
+
+    .envelope {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: var(--env-base);
+      border-radius: 8px;
+      box-shadow: 0 15px 35px rgba(74, 60, 49, 0.08);
+      transform-style: preserve-3d;
+    }
+
+    /* Top Flap */
+    .flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: var(--env-flap);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top;
+      z-index: 4;
+      transition: transform 0.5s ease-in-out, z-index 0.2s 0.2s;
+      border-radius: 8px 8px 0 0;
+    }
+
+    /* Envelope Pocket */
+    .pocket {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--env-inner);
+      clip-path: polygon(0 40%, 100% 40%, 100% 100%, 0 100%);
+      border-radius: 8px;
+      z-index: 3;
+    }
+
+    .pocket::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--env-pocket);
+      clip-path: polygon(0 40%, 50% 72%, 100% 40%, 100% 100%, 0 100%);
+      border-radius: 8px;
+    }
+
+    /* Wax Seal */
+    .wax-seal {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -40%);
+      width: 52px;
+      height: 52px;
+      background: var(--seal-bg);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 5;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 0 0 0 var(--seal-shadow);
+      transition: all 0.3s ease;
+      animation: pulse-seal 2.5s infinite;
+    }
+
+    .wax-seal svg {
+      width: 22px;
+      height: 22px;
+      fill: #fffdfc;
+    }
+
+    @keyframes pulse-seal {
+      0% {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 0 0 0 var(--seal-shadow);
+      }
+      70% {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 0 0 12px rgba(140, 45, 25, 0);
+      }
+      100% {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 0 0 0 rgba(140, 45, 25, 0);
+      }
+    }
+
+    /* Preview Lines inside envelope */
+    .letter-preview {
+      position: absolute;
+      bottom: 10px;
+      left: 15px;
+      width: calc(100% - 30px);
+      height: 80%;
+      background: var(--letter-bg);
+      border-radius: 4px;
+      z-index: 2;
+      transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+
+    .preview-line {
+      height: 6px;
+      background: #ebdcd0;
+      border-radius: 3px;
+      opacity: 0.6;
+    }
+    .line-1 { width: 75%; margin: 0 auto; }
+    .line-2 { width: 55%; margin: 0 auto; }
+    .line-3 { width: 40%; margin: 0 auto; }
+
+    /* Open States */
+    .envelope-wrapper.open .flap {
+      transform: rotateX(180deg);
+      z-index: 1;
+    }
+
+    .envelope-wrapper.open .wax-seal {
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, -40%) scale(0.7);
+    }
+
+    .envelope-wrapper.open .letter-preview {
+      transform: translateY(-90px);
+      z-index: 3.5;
+    }
+
+    /* Expanded Overlay Card */
+    .letter-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(74, 60, 49, 0.12);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+    }
+
+    .letter-overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .letter-card {
+      background: var(--letter-bg);
+      width: 90%;
+      max-width: 440px;
+      height: auto;
+      max-height: 80vh;
+      border-radius: 16px;
+      box-shadow: 0 20px 50px rgba(74, 60, 49, 0.12);
+      padding: 40px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      transform: scale(0.92) translateY(15px);
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      border: 1px solid rgba(235, 220, 208, 0.4);
+    }
+
+    .letter-overlay.show .letter-card {
+      transform: scale(1) translateY(0);
+    }
+
+    /* Vintage Double Border */
+    .letter-card::before {
+      content: '';
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+      border: 1px double var(--letter-border);
+      border-radius: 12px;
+      pointer-events: none;
+    }
+
+    .letter-header {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.45rem;
+      margin-bottom: 20px;
+      color: var(--text-accent);
+      font-weight: 600;
+      text-align: center;
+      font-style: italic;
+    }
+
+    .letter-body {
+      font-size: 1.02rem;
+      line-height: 1.8;
+      overflow-y: auto;
+      flex-grow: 1;
+      padding-right: 8px;
+      font-weight: 300;
+      white-space: pre-wrap;
+      color: var(--text-main);
+      min-height: 160px;
+    }
+
+    .letter-body::-webkit-scrollbar {
+      width: 3px;
+    }
+    .letter-body::-webkit-scrollbar-thumb {
+      background: var(--letter-border);
+      border-radius: 2px;
+    }
+
+    .letter-footer {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.7rem;
+      text-align: right;
+      margin-top: 25px;
+      color: var(--text-accent);
+      font-weight: bold;
+    }
+
+    .close-btn {
+      position: absolute;
+      bottom: -64px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fffdfc;
+      border: 1px solid rgba(235, 220, 208, 0.6);
+      padding: 10px 24px;
+      border-radius: 30px;
+      font-family: 'Be Vietnam Pro', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-main);
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .close-btn:hover {
+      background: var(--text-accent);
+      color: #fffdfc;
+      border-color: var(--text-accent);
+      transform: translateX(-50%) translateY(-2px);
+      box-shadow: 0 6px 18px rgba(169, 124, 80, 0.15);
+    }
+
+    .hint-label {
+      margin-top: 25px;
+      font-size: 0.85rem;
+      color: #a4968a;
+      transition: opacity 0.3s ease;
+      font-weight: 300;
+    }
+
+    /* Minimal Music Widget */
+    .music-player {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      background: #fffdfc;
+      padding: 8px 16px;
+      border-radius: 30px;
+      box-shadow: 0 4px 15px rgba(74, 60, 49, 0.05);
+      border: 1px solid rgba(235, 220, 208, 0.6);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    .music-player:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(74, 60, 49, 0.08);
+    }
+
+    .music-icon {
+      font-size: 1rem;
+      margin-right: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .music-lbl {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: #8c7b6d;
+    }
+
+    .sound-waves {
+      display: flex;
+      align-items: flex-end;
+      height: 9px;
+      gap: 2px;
+      margin-left: 8px;
+    }
+
+    .wave-bar {
+      width: 2px;
+      height: 100%;
+      background: var(--text-accent);
+      border-radius: 1px;
+      transform-origin: bottom;
+      transform: scaleY(0.3);
+    }
+
+    .music-player.active .wave-bar:nth-child(1) { animation: sound-wave-anim 1s infinite alternate ease-in-out; }
+    .music-player.active .wave-bar:nth-child(2) { animation: sound-wave-anim 0.7s infinite alternate ease-in-out; animation-delay: 0.15s; }
+    .music-player.active .wave-bar:nth-child(3) { animation: sound-wave-anim 0.9s infinite alternate ease-in-out; animation-delay: 0.3s; }
+
+    @keyframes sound-wave-anim {
+      0% { transform: scaleY(0.2); }
+      100% { transform: scaleY(1); }
+    }
+
+    /* Extremely slow drift particles (golden light) */
+    .particle {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      background: rgba(169, 124, 80, 0.12);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: float-drift 9s linear infinite;
+      z-index: 2;
+    }
+
+    @keyframes float-drift {
+      0% {
+        transform: translateY(-10px) translateX(0) scale(0.8);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.6;
+      }
+      90% {
+        opacity: 0.6;
+      }
+      100% {
+        transform: translateY(105vh) translateX(60px) scale(1.2);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hidden H1 for SEO compliance -->
+  <h1 style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0;">Bức Thư Nhỏ Gửi Lời Chúc Ý Nghĩa</h1>
+
+  <!-- Ambient blur shapes -->
+  <div class="decorations">
+    <div class="decor-blur decor-1"></div>
+    <div class="decor-blur decor-2"></div>
+  </div>
+
+  <!-- Slow moving particles container -->
+  <div id="particles-area" style="position: absolute; top:0; left:0; width:100%; height:100%; overflow:hidden; pointer-events:none;"></div>
+
+  <div class="envelope-container">
+    <div class="envelope-wrapper" id="envWrap">
+      <div class="envelope">
+        <div class="flap"></div>
+        <div class="pocket"></div>
+        <div class="letter-preview">
+          <div class="preview-line line-1"></div>
+          <div class="preview-line line-2"></div>
+          <div class="preview-line line-3"></div>
+        </div>
+      </div>
+      <div class="wax-seal" id="waxSeal">
+        <!-- SVG Classic Heart -->
+        <svg viewBox="0 0 24 24">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+      </div>
+    </div>
+    
+    <div class="hint-label" id="hintLbl">Chạm vào phong bì để nhận lời chúc</div>
+  </div>
+
+  <!-- Detailed overlay -->
+  <div class="letter-overlay" id="overlayCard">
+    <div class="letter-card">
+      <div class="letter-header" id="greetingTo">Gửi Bạn,</div>
+      <div class="letter-body" id="textBody"></div>
+      <div class="letter-footer" id="signature">Thân mến</div>
+      
+      <button class="close-btn" id="closeBtn" aria-label="Đóng thư">
+        <!-- SVG Chevron Left -->
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+        Khép lại thư
+      </button>
+    </div>
+  </div>
+
+  <!-- Music element -->
+  <div class="music-player" id="musicPlayer" role="button" aria-label="Bật/Tắt nhạc nền">
+    <span class="music-icon">🎹</span>
+    <span class="music-lbl" id="musicStatus">Bật nhạc</span>
+    <div class="sound-waves">
+      <div class="wave-bar"></div>
+      <div class="wave-bar"></div>
+      <div class="wave-bar"></div>
+    </div>
+  </div>
+
+  <audio id="audioMelody" loop preload="auto">
+    <!-- Soft piano preview track from Mixkit -->
+    <source src="https://assets.mixkit.co/music/preview/mixkit-soft-piano-background-504.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    // 1. URL parameters to easily customize sender, receiver and message content
+    const urlParams = new URLSearchParams(window.location.search);
+    const toWho = urlParams.get('to') || 'bà nè!!';
+    const fromWho = urlParams.get('from') || 'Vợ Martin Edwards';
+    
+    const defaultText = `Helu bà zà hihi,e là én đàn em chj Hân xênh gái đây.Nay là một ngày đẹp trời đệ tử xin gửi lời chúc xuyên tỉnh thành từ Bắc vô Nam đến một người siêu đặc biệt:\n\nChúc chj yêu trước hết là phải luôn vui vẻ hạnh phúc và bớt stresss lại nghen, giữ gìn sức khỏe nữa chứ yếu xìu thì sao mà thi tốt với quậy được, à thêm xinh đẹp nữa luôn luôn tự tin vững bước trên mọi nẻo đường nho !!!! MNF cho chị yêu học đâu nhớ đó, vững chí thi tốt nhé .\n\nĐỖ NV1-ĐỖ NV1-ĐỖ NV1 ( điều ý nghĩa nhắc lại 3 lần) / đừng stress nx nha nhắc lại nhx quan trọng đó/ !!!( thư hơi cringe cringe tý bà chị cố mà đọc nhe =)`;
+    const messageBody = urlParams.get('msg') || defaultText;
+
+    // DOM selection
+    const envWrap = document.getElementById('envWrap');
+    const hintLbl = document.getElementById('hintLbl');
+    const overlayCard = document.getElementById('overlayCard');
+    const closeBtn = document.getElementById('closeBtn');
+    const greetingTo = document.getElementById('greetingTo');
+    const textBody = document.getElementById('textBody');
+    const signature = document.getElementById('signature');
+    const musicPlayer = document.getElementById('musicPlayer');
+    const audioMelody = document.getElementById('audioMelody');
+    const musicStatus = document.getElementById('musicStatus');
+
+    // Populate customized names
+    greetingTo.textContent = `Gửi ${toWho},`;
+    signature.textContent = fromWho;
+
+    // Typing speed control
+    let timerId = null;
+    function typeEffect(text, targetElement, speed = 35) {
+      targetElement.textContent = '';
+      let index = 0;
+      clearInterval(timerId);
+      
+      return new Promise((resolve) => {
+        timerId = setInterval(() => {
+          if (index < text.length) {
+            targetElement.textContent += text.charAt(index);
+            index++;
+            targetElement.scrollTop = targetElement.scrollHeight; // Auto-scroll
+          } else {
+            clearInterval(timerId);
+            resolve();
+          }
+        }, speed);
+      });
+    }
+
+    // Envelope open handler
+    envWrap.addEventListener('click', () => {
+      envWrap.classList.add('open');
+      hintLbl.style.opacity = '0';
+      
+      // Attempt auto music play
+      if (audioMelody.paused) {
+        startPlay();
+      }
+
+      // Smooth slide and fade overlay in
+      setTimeout(() => {
+        overlayCard.classList.add('show');
+        typeEffect(messageBody, textBody, 30);
+      }, 1100);
+    });
+
+    // Envelope close handler
+    closeBtn.addEventListener('click', () => {
+      overlayCard.classList.remove('show');
+      envWrap.classList.remove('open');
+      clearInterval(timerId);
+      
+      setTimeout(() => {
+        hintLbl.style.opacity = '1';
+      }, 550);
+    });
+
+    // Music control methods
+    let playing = false;
+    
+    function startPlay() {
+      audioMelody.play()
+        .then(() => {
+          playing = true;
+          musicPlayer.classList.add('active');
+          musicStatus.textContent = "Lofi Piano";
+        })
+        .catch(e => {
+          console.log("Audio requires interaction to play.");
+        });
+    }
+
+    // Attempt autoplay on first body touch if blocked
+    document.body.addEventListener('click', () => {
+      if (envWrap.classList.contains('open') && audioMelody.paused && !playing) {
+        // Only trigger once user has opened letter and music isn't active
+        startPlay();
+      }
+    }, { once: true });
+
+    function stopPlay() {
+      audioMelody.pause();
+      playing = false;
+      musicPlayer.classList.remove('active');
+      musicStatus.textContent = "Bật nhạc";
+    }
+
+    musicPlayer.addEventListener('click', (e) => {
+      e.stopPropagation(); // Stop click from triggering parent opening events
+      if (playing) {
+        stopPlay();
+      } else {
+        startPlay();
+      }
+    });
+
+    // Light slow drift particle effect
+    const particlesArea = document.getElementById('particles-area');
+    function generateParticle() {
+      const p = document.createElement('div');
+      p.classList.add('particle');
+      
+      const width = Math.random() * 4 + 2;
+      p.style.width = `${width}px`;
+      p.style.height = `${width}px`;
+      p.style.left = `${Math.random() * 100}%`;
+      
+      const duration = Math.random() * 6 + 7;
+      p.style.animationDuration = `${duration}s`;
+      p.style.opacity = Math.random() * 0.25 + 0.05;
+      
+      particlesArea.appendChild(p);
+      
+      setTimeout(() => {
+        p.remove();
+      }, duration * 1000);
+    }
+
+    // Spawn particles sparingly
+    setInterval(generateParticle, 1200);
+  </script>
+</body>
+</html>
