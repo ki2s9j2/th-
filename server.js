@@ -17,9 +17,35 @@ let statusState = {
     }
 };
 
-// Belt 3 Matchmaking Database
+// Belt 3 & 5 Matchmaking Databases
 let matches = {}; // username -> { partner, role, jobId, placeId, status: 'waiting' | 'matched', timestamp }
 let matchQueue = []; // array of usernames waiting as hosts
+let matchesBelt5 = {}; // username -> { partner, role, jobId, placeId, status: 'waiting' | 'matched', timestamp }
+let matchQueueBelt5 = []; // array of usernames waiting as hosts
+
+// Automatic Matchmaking Garbage Collector (Runs every 30s to clean up inactive matches > 5 minutes)
+setInterval(() => {
+    const now = Date.now();
+    const TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes timeout
+
+    // Cleanup Belt 3
+    for (const [username, match] of Object.entries(matches)) {
+        if (now - match.timestamp > TIMEOUT_MS) {
+            addLog('belt3', `[P2P] Cleanup timeout cho [${username}]`);
+            delete matches[username];
+            matchQueue = matchQueue.filter(u => u !== username);
+        }
+    }
+
+    // Cleanup Belt 5
+    for (const [username, match] of Object.entries(matchesBelt5)) {
+        if (now - match.timestamp > TIMEOUT_MS) {
+            addLog('belt5', `[P2P] Cleanup timeout cho [${username}]`);
+            delete matchesBelt5[username];
+            matchQueueBelt5 = matchQueueBelt5.filter(u => u !== username);
+        }
+    }
+}, 30000);
 
 // Helper function to add logs
 function addLog(belt, message) {
@@ -161,8 +187,6 @@ app.post('/api/belt3/complete', (req, res) => {
 });
 
 // ================= BELT 5 P2P MATCHMAKING ENDPOINTS =================
-let matchesBelt5 = {}; // username -> { partner, role, jobId, placeId, status: 'waiting' | 'matched', timestamp }
-let matchQueueBelt5 = []; // array of usernames waiting as hosts
 
 app.post('/api/belt5/match', (req, res) => {
     const { username, jobId, placeId } = req.body;
