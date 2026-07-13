@@ -1,0 +1,15 @@
+{
+  "name": "bloxfruits-dojo-coordinator",
+  "version": "1.0.0",
+  "description": "Coordinator API server for Blox Fruits 8 Dojo Belts Script",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "author": "Antigravity",
+  "license": "ISC"
+}
